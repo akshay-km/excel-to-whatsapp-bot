@@ -141,19 +141,30 @@ def create_error_excel(error_list, log_callback):
     return msg
 
 
-def get_chrome_driver(op_system: str):
-    if op_system == "windows":
+class UnsupportedOs(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+
+def get_chrome_driver(log_callback):
+    if os.name == "nt":
         # Chrome - Windows => Add path of chromedriver to Env PATH
+        print("Getting Chromedriver for WINDOWS")
+        log_callback("Getting Chromedriver for WINDOWS")
         chrome_driver = webdriver.Chrome()
         return chrome_driver
-    elif op_system == "linux":
+    elif os.name == "posix":
+        # Chrome - Linux
+        print("Getting Chromedriver for LINUX")
         chrome_options = Options()
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_driver = webdriver.Chrome(options=chrome_options)
         return chrome_driver
     else:
-        print("Invalid OS; choose windows or linux")
+        print("Invalid OS; only works on  windows or linux")
+        raise UnsupportedOs(f"This apps only supports WINDOWS and LINUX")
 
 
 def get_log_file_path() -> str:
@@ -187,28 +198,29 @@ def log_result(excel_file_name: str, sheet_list: list, message: str, log_callbac
 def start_whatsapp_messaging(file_name: str, sheet_list: list, log_callback, done_callback):
     df = read_file(file_name, sheet_list, log_callback)
     try:
-        driver = get_chrome_driver("linux")
-        # driver = get_chrome_driver("windows")
+        driver = get_chrome_driver(log_callback)
     except Exception as e:
         log_callback(f"Chrome driver Error: ")
         done_callback("CHROMEDRIVER ERROR",
                       "Make sure you have added chromedriver directory to PATH environment variable"
                       )
-    open_whatsapp(driver, log_callback)
-    send_message(df, driver, log_callback)
-
-    if success_count == df.shape[0] and len(error_list) == 0:
-        print("All MESSAGES SENT SUCCESSFULLY")
-        log_callback("All MESSAGES SENT SUCCESSFULLY")
-        msg = "All MESSAGES SENT SUCCESSFULLY"
     else:
-        msg = create_error_excel(error_list, log_callback)
+        open_whatsapp(driver, log_callback)
+        send_message(df, driver, log_callback)
 
-    result_text = f"TOTAL MESSAGES: {df.shape[0]} | SUCCESS : {success_count} | FAILED: {len(error_list)}"
-    print(result_text)
-    log_callback(result_text)
-    # Close the browser
-    driver.quit()
+        if success_count == df.shape[0] and len(error_list) == 0:
+            print("All MESSAGES SENT SUCCESSFULLY")
+            log_callback("All MESSAGES SENT SUCCESSFULLY")
+            msg = "All MESSAGES SENT SUCCESSFULLY"
+        else:
+            msg = create_error_excel(error_list, log_callback)
 
-    log_result(file_name, sheet_list,result_text, log_callback)
-    done_callback("MESSAGING COMPLETED", result_text + f"\n {msg}")
+        result_text = f"TOTAL MESSAGES: {df.shape[0]} | SUCCESS : {success_count} | FAILED: {len(error_list)}"
+        print(result_text)
+        log_callback(result_text)
+        # Close the browser
+        driver.quit()
+
+        log_result(file_name, sheet_list,result_text, log_callback)
+        done_callback("MESSAGING COMPLETED", result_text + f"\n {msg}")
+
