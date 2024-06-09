@@ -3,7 +3,7 @@ An windows app made with python , that reads excel file containing names, phone 
 
 ## REQUIREMENTS 
 1.Should have Google Chrome installed.
-2. Download Chromedriver version compatible to Google chrome version from (here)[https://googlechromelabs.github.io/chrome-for-testing/]. Add the path to chromedriver to the PATH environment variable.
+2. Download Chromedriver version compatible to Google chrome version from [googlechromelabs](https://googlechromelabs.github.io/chrome-for-testing/). Add the path to chromedriver to the PATH environment variable.
 3. The excel file must have columns with headings **NAME**, **MOB**, **MESSAGE** and **ACTION**. ACTION should be last column and for records to be send via whatsapp, the value for ACTION column must be 'SEND'.
 
 ## INSTRUCTIONS TO RUN THE PROGRAM
