@@ -10,7 +10,8 @@ class ExcelApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Excel to Whatsapp Bot")
-        self.root.geometry("700x800")
+        self.root.geometry("600x400")
+        self.root.configure(bg="gray")
 
         self.file_path = ""
         self.selected_sheets = []
@@ -25,7 +26,7 @@ class ExcelApp:
         self.select_file_button.pack(pady=10)
 
         # Label for displaying selected file
-        self.file_label = tk.Label(self.root, text="No file selected", wraplength=600, fg="green")
+        self.file_label = tk.Label(self.root, text="No file selected", wraplength=600, fg="white", bg="gray")
         self.file_label.pack(pady=10)
 
         # Listbox for sheet names with multiple selection enabled
@@ -69,7 +70,7 @@ class ExcelApp:
             self.log(f"Error: Failed to read Excel file: {e}")
 
     def on_messaging_complete(self, title, message):
-        self.log("Messaging process complete.")
+        self.log("\n<<< MESSAGING PROCESS COMPLETE. CLICK X button TO CLOSE THE APP >>>")
         self.show_message(title, message)
 
     def confirm_selection(self):
@@ -99,15 +100,15 @@ class ExcelApp:
         # Create a new top-level window
         messagebox_window = tk.Toplevel(self.root)
         messagebox_window.title(title)
-        messagebox_window.geometry("500x150")
-        messagebox_window.configure(bg="white")
+        messagebox_window.geometry("300x150")
+        messagebox_window.configure(bg="green")
 
         # Create a label for the message
-        message_label = tk.Label(messagebox_window, text=message, fg="green", bg="white", wraplength=450)
+        message_label = tk.Label(messagebox_window, text=message, fg="white", bg="green", wraplength=250)
         message_label.pack(pady=20, padx=10)
 
         # Create an OK button to close the message box
-        ok_button = tk.Button(messagebox_window, text="OK", command=messagebox_window.destroy)
+        ok_button = tk.Button(messagebox_window, text="OK", command=messagebox_window.destroy, bg="#4795ed", fg="white")
         ok_button.pack(pady=10)
 
 

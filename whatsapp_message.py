@@ -93,7 +93,7 @@ def get_excel_file_path() -> str:
         os.makedirs(directory)
 
     now = datetime.now()
-    date_time_str = now.strftime("%d-%m-%Y-%H:%M:%S")
+    date_time_str = now.strftime("%d-%m-%Y-%H-%M-%S")
     file_name = f"failed-{date_time_str}.xlsx"
     file_path = os.path.join(directory, file_name)
     return file_path
@@ -173,7 +173,7 @@ def get_log_file_path() -> str:
         os.makedirs(directory)
 
     now = datetime.now()
-    date_time_str = now.strftime("%d-%m-%Y-%H:%M:%S")
+    date_time_str = now.strftime("%d-%m-%Y-%H-%M-%S")
     file_name = f"completed-{date_time_str}.txt"
     file_path = os.path.join(directory, file_name)
     return file_path
