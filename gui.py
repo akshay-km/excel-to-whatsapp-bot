@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import pandas as pd
 from whatsapp_message import start_whatsapp_messaging
+from make_logs import get_logger
 
 
 class ExcelApp:
@@ -15,9 +16,15 @@ class ExcelApp:
 
         self.file_path = ""
         self.selected_sheets = []
+        
+        # Logger
+        self.start_logger()
 
         # Widgets
         self.create_widgets()
+
+    def start_logger(self):
+        self.logger = get_logger()
 
     def create_widgets(self):
         # Button to select Excel file
@@ -54,6 +61,7 @@ class ExcelApp:
         if self.file_path:
             self.file_label.config(text=f"Selected File : {self.file_path}")
             self.log(f"Selected file: {self.file_path}")
+            self.logger.log(f"Selected file: {self.file_path}")
             self.load_sheets()
 
     def load_sheets(self):
@@ -68,6 +76,8 @@ class ExcelApp:
         except Exception as e:
             self.show_message("Error", f"Failed to read Excel file: {e}")
             self.log(f"Error: Failed to read Excel file: {e}")
+            self.logger.log(f"Error: Failed to read Excel file: {e}")
+
 
     def on_messaging_complete(self, title, message):
         self.log("\n<<< MESSAGING PROCESS COMPLETE. CLICK X button TO CLOSE THE APP >>>")
@@ -80,6 +90,7 @@ class ExcelApp:
         if not self.selected_sheets:
             self.show_message("Warning", "Please select at least one sheet.")
             self.log("Warning: No sheets selected.")
+            self.logger.log("Warning: No sheets selected.")
             return
 
         # Remove buttons and listbox
@@ -90,6 +101,8 @@ class ExcelApp:
         # Pack the log_text widget to display logs
         self.log_text.pack(pady=10, fill=tk.BOTH, expand=True)
         self.log(f"Selected Sheets : {self.selected_sheets}")
+        self.logger.log(f"Selected Sheets : {self.selected_sheets}")
+
 
         # Call the external function and pass the log callback
         # new thread used to ensure logging is not blocked by whatsapp messaging thread
