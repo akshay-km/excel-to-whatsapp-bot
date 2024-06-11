@@ -1,4 +1,4 @@
-import os.path
+import os
 import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -7,12 +7,13 @@ from whatsapp_message import start_whatsapp_messaging
 from make_logs import get_logger
 
 
+
 class ExcelApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Excel to Whatsapp Bot")
         self.root.geometry("600x400")
-        self.root.configure(bg="gray")
+        self.root.configure(bg="#195B1A")
 
         self.file_path = ""
         self.selected_sheets = []
@@ -33,7 +34,7 @@ class ExcelApp:
         self.select_file_button.pack(pady=10)
 
         # Label for displaying selected file
-        self.file_label = tk.Label(self.root, text="No file selected", wraplength=600, fg="white", bg="gray")
+        self.file_label = tk.Label(self.root, text="No file selected", wraplength=600, fg="white", bg="#195B1A")
         self.file_label.pack(pady=10)
 
         # Listbox for sheet names with multiple selection enabled
@@ -79,9 +80,12 @@ class ExcelApp:
             self.logger.log(f"Error: Failed to read Excel file: {e}")
 
 
-    def on_messaging_complete(self, title, message):
-        self.log("\n<<< MESSAGING PROCESS COMPLETE. CLICK X button TO CLOSE THE APP >>>")
-        self.show_message(title, message)
+    def on_messaging_complete(self, title, message, color=None):
+        # self.log("\n<<< MESSAGING PROCESS COMPLETE. CLICK X button TO CLOSE THE APP >>>")
+        if color:
+            self.show_message(title, message, color)
+        else:
+            self.show_message(title, message)
 
     def confirm_selection(self):
         # Get selected items from the listbox
@@ -109,15 +113,15 @@ class ExcelApp:
         threading.Thread(target=start_whatsapp_messaging,
                          args=(self.file_path, self.selected_sheets, self.log, self.on_messaging_complete)).start()
 
-    def show_message(self, title, message):
+    def show_message(self, title, message, color="green"):
         # Create a new top-level window
         messagebox_window = tk.Toplevel(self.root)
         messagebox_window.title(title)
         messagebox_window.geometry("300x150")
-        messagebox_window.configure(bg="green")
+        messagebox_window.configure(bg=color)
 
         # Create a label for the message
-        message_label = tk.Label(messagebox_window, text=message, fg="white", bg="green", wraplength=250)
+        message_label = tk.Label(messagebox_window, text=message, fg="white", bg=color, wraplength=250)
         message_label.pack(pady=20, padx=10)
 
         # Create an OK button to close the message box
