@@ -27,7 +27,7 @@ def open_whatsapp(driver, log_callback):
         print("Please scan the QR code to log in.")
         log_callback("Please scan the QR code to log in.")
         logger.log("Please scan the QR code to log in.")
-        WebDriverWait(driver, 120).until_not(
+        WebDriverWait(driver, 180).until_not(
             EC.presence_of_element_located((By.XPATH, '//canvas[@aria-label="Scan me!"]'))
         )
     except Exception as e:
@@ -47,7 +47,7 @@ def open_whatsapp(driver, log_callback):
         print("Waiting for the chat page to load...")
         log_callback("Waiting for the chat page to load...")
         logger.log("Waiting for the chat page to load...")
-        WebDriverWait(driver, 60).until(
+        WebDriverWait(driver, 180).until(
             EC.presence_of_element_located((By.XPATH, '//div[@aria-label="Chat list"]'))
         ) 
     except Exception as e:
