@@ -97,12 +97,13 @@ def check_invalid_number_popup(driver, stop_event, result_queue):
                 result_queue.put(("INVALID_POP_UP"))
                 return
             except TimeoutException:
-                # If we timed out, just loop again
                 continue
     except Exception as e:
         print(f"Error while waiting for invalid pop up: {e}")
         logger.log(f"Error while waiting for invalid pop up: {e}")
         result_queue.put("POP_UP_TIMEOUT")
+
+
 # Function to wait for the send button and click it
 def wait_for_send_button(driver, stop_event, result_queue):
     print("Waiting for send button....")
@@ -119,7 +120,6 @@ def wait_for_send_button(driver, stop_event, result_queue):
             if stop_event['flag']:
                 print("Pop up loaded, stopping wait for SEND BUTTON")
                 logger.log("Pop up loaded, stopping wait for SEND BUTTON")
-                # result_queue.put(("send_button", None))
                 return
             
             try:
@@ -145,7 +145,6 @@ def wait_for_send_button(driver, stop_event, result_queue):
 
                 with stop_event['lock']:
                     stop_event['flag'] = True
-                # result_queue.put("")
                 return
             except TimeoutException:
                 # If we timed out, just loop again
@@ -246,7 +245,6 @@ def read_file(file_name: str, sheet_list: list):
             print(f"if missing headers: {missing_headers} ")
             return {"headers_missing": missing_headers}
         df.columns = [*df.columns[:-1], 'ACTION']
-        # df.dropna(subset=['ACTION'], inplace=True)
         df = df[df['ACTION'] == 'SEND']
         return {"df": df}
     
@@ -257,7 +255,6 @@ def send_message(df, driver, log_callback, done_callback):
 
     for row in df.itertuples(index=False):
         if row.ACTION == 'SEND':
-            # log_callback(f"Sending message to {row.MOB}")
             try:
                 open_whatsapp_and_send_message(driver, row.MOB, row.MESSAGE, row.NAME, log_callback)
             except Exception as e:
@@ -307,7 +304,7 @@ def create_error_excel(error_list, log_callback):
         df1.to_excel(writer, sheet_name='Sheet1', index=False)
         worksheet = writer.sheets['Sheet1']
 
-        # Iterate through the DataFrame and add hyperlinks
+        # Adding hyperlinks
         for row_num, link in enumerate(df1['LINK'], start=1):
             worksheet.write_url(row_num, 3, link, string="SEND")
 
@@ -424,7 +421,7 @@ def logout_whatsapp(driver, log_callback):
 
 def start_whatsapp_messaging(file_name: str, sheet_list: list, log_callback, done_callback):
 
-    #INITIALIZE Logger
+    # Initialize Logger
     global logger
     logger = get_logger()
 
@@ -439,7 +436,6 @@ def start_whatsapp_messaging(file_name: str, sheet_list: list, log_callback, don
                       "red")
         log_callback("Click on X to close")
         return
-    # elif 'df' in excel_result.keys():
     else:
         df = excel_result['df']
         if df.shape[0] == 0:
@@ -489,7 +485,6 @@ def start_whatsapp_messaging(file_name: str, sheet_list: list, log_callback, don
         log_callback(result_text)
         logger.log(result_text)
         
-        # Logout of whatsapp
         logout_whatsapp(driver, log_callback)
 
         # Close the browser

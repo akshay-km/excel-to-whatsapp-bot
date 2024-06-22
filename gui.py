@@ -48,7 +48,6 @@ class ExcelApp:
 
         # Text widget for displaying logs
         self.log_text = tk.Text(self.root, height=10, bg="black", fg="#5ba0f0")
-        # self.log_text.pack(pady=10, fill=tk.BOTH, expand=True)
 
     def log(self, message):
         self.log_text.insert(tk.END, message + '\n')
@@ -73,7 +72,6 @@ class ExcelApp:
             self.sheet_listbox.delete(0, tk.END)  # Clear previous entries
             for sheet in sheet_names:
                 self.sheet_listbox.insert(tk.END, sheet)
-            # self.log(f"Loaded sheets: {', '.join(sheet_names)} \n")
         except Exception as e:
             self.show_message("Error", f"Failed to read Excel file: {e}")
             self.log(f"Error: Failed to read Excel file: {e}")
@@ -81,7 +79,6 @@ class ExcelApp:
 
 
     def on_messaging_complete(self, title, message, color=None):
-        # self.log("\n<<< MESSAGING PROCESS COMPLETE. CLICK X button TO CLOSE THE APP >>>")
         if color:
             self.show_message(title, message, color)
         else:
