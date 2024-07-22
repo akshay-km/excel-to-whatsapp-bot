@@ -1,10 +1,10 @@
 # excel-to-whatsapp-bot
-An windows app made with python , that reads excel file containing names, phone numbers , message , etc and sends message to each phone number via whatsapp web.
+An windows app made with python , that reads excel file containing details like  `names`, `phone numbers` & `message`  and sends automatically sends message to each `phone number` via whatsapp web linked to user's whatsapp account.
 
 ## REQUIREMENTS 
-1.Should have Google Chrome installed.
+1. Should have Google Chrome installed.
 2. Download Chromedriver version compatible to Google chrome version from [googlechromelabs](https://googlechromelabs.github.io/chrome-for-testing/). Add the path to chromedriver to the PATH environment variable.
-3. The excel file must have columns with headings **NAME**, **MOB**, **MESSAGE** and **ACTION**. ACTION should be last column and for records to be send via whatsapp, the value for ACTION column must be 'SEND'.
+3. The excel file must have columns with headings **NAME**, **MOB**, **MESSAGE** and **ACTION**. ACTION should be last column and for rows with messages to be send via whatsapp, the value for ACTION column must be 'SEND'.
 
 ## INSTRUCTIONS TO RUN THE PROGRAM
 1. Download lastest releases and extract the folder.
